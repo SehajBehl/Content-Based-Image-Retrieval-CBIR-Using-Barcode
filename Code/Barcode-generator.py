@@ -52,8 +52,17 @@ barcodes = np.array(barcodes)
 
 
 # Define a function to calculate the Hamming distance between two barcodes
-def hamming_distance(barcode1, barcode2):
-    return np.sum(barcode1 != barcode2)
+def hamming_similarity(barcode1, barcode2):
+    # Calculate the Hamming distance between the two barcodes
+    distance = np.sum(barcode1 != barcode2)
+    
+    # Calculate the maximum possible Hamming distance (i.e., the length of the barcodes)
+    max_distance = len(barcode1)
+    
+    # Calculate the percentage similarity
+    similarity = 1 - distance / max_distance
+    
+    return similarity
 
 
 # Define a function to find the most similar image in the dataset using the Hamming distance
@@ -63,5 +72,9 @@ def find_most_similar(query_barcode):
 
 
 # Example usage: Find the most similar image to the first image in the dataset
-most_similar_index = find_most_similar(barcodes[1])
-print(f'The most similar image is at index {most_similar_index}')
+query_barcode = barcodes[1]
+most_similar_index = find_most_similar(query_barcode)
+most_similar_barcode = barcodes[most_similar_index]
+similarity = hamming_similarity(query_barcode, most_similar_barcode)
+print(f'The most similar image is at index {most_similar_index} with {similarity:.2%} similarity')
+
